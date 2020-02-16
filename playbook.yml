@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks: 
+   - name: Create a data container
+     docker_container:
+       name: mydata
+       image: busybox
+       volumes:
+         - /data
