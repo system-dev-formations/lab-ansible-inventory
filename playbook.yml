@@ -1,9 +1,17 @@
 ---
 - hosts: all
   tasks: 
-   - name: Create a data container
-     docker_container:
-       name: mydata
-       image: busybox
-       volumes:
-         - /data
+   - name: Create an ubuntu container
+     command: docker run -d --name web ubuntu /bin/bash
+
+
+   - name: add container to inventory
+     add_host:
+       name: web
+       ansible_connection: docker
+     changed_when: false
+
+   - name: run command in container
+     delegate_to: web
+     raw: /proc/cpuinfo
+
