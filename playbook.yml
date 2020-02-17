@@ -1,9 +1,12 @@
 ---
 - hosts: all
   tasks: 
-   - name: Create an ubuntu container
-     command: docker run -d --name web ubuntu /bin/bash
-
+   - name: Create a centos container
+     docker_container:
+       name: web
+       image: centos:7
+       detach: yes
+       tty: yes
 
    - name: add container to inventory
      add_host:
@@ -13,5 +16,11 @@
 
    - name: run command in container
      delegate_to: web
-     raw: /proc/cpuinfo
+     raw: yum -y update && yum install -y python
 
+   - name: run df command in container
+     delegate_to: web
+     command: df -h
+     register: result
+   - name: Print df value
+     debug: msg="value {{ result.stdout }}"
