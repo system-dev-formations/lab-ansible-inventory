@@ -1,6 +1,11 @@
 ---
 - hosts: all
   tasks:
+   - name: Delete container
+     docker_container:
+       name: web
+       state: absent
+     ignore_errors: yes
    - name: Create a centos container
      docker_container:
        name: web
@@ -16,11 +21,11 @@
 
    - name: run command in container
      delegate_to: web
-     raw: yum -y update && yum install -y python
+     raw: yum -y update && yum install -y python && yum -y install git
 
-   - name: run df command in container
+   - name: run git command in container
      delegate_to: web
-     command: df -h
+     command: git --version
      register: result
-   - name: Print df value
-     debug: msg="value {{ result.stdout }}"
+   - name: Print git version
+     debug: msg="{{ result.stdout }}"
