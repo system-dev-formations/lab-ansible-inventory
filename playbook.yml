@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  tasks: 
+  tasks:
    - name: Create a centos container
      docker_container:
        name: web
