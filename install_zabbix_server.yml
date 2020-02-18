@@ -1,0 +1,29 @@
+---
+- hosts: all
+  tasks:
+    - name: Delete container
+      docker_container:
+        name: zabbix-server
+        state: absent
+      ignore_errors: yes
+    - name: Create a centos container
+      docker_container:
+        name: zabbix-server
+        image: centos:7
+        detach: yes
+        tty: yes
+    - name: add container to inventory
+      add_host:
+        name: zabbix-server
+        ansible_connection: docker
+      changed_when: false
+    - name: run basic commands on the container
+      delegate_to: zabbix-server
+      raw: yum -y update && yum install -y python && yum -y install wget && yum -y install "@Development tools"
+    - name: run zabbix-server command in container
+      delegate_to: zabbix-server
+      get_url:
+        url: https://netcologne.dl.sourceforge.net/project/zabbix/ZABBIX%20Latest%20Stable/4.4.5/zabbix-4.4.5.tar.gz
+        dest: /zabbix-4.4.5
+        checksum: sha256:94a897825b062e17b34767c0864305cee6a87476dda8bee88dcf845b24bed0ea
+

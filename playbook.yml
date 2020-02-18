@@ -13,6 +13,7 @@
        detach: yes
        tty: yes
 
+
    - name: add container to inventory
      add_host:
        name: web
