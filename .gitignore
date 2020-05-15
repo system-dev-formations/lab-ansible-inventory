@@ -135,4 +135,5 @@ venv.bak/
 
 # Ansible
 *.retry
+inventory
 

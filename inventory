@@ -1,2 +1,4 @@
 [local]
 localhost ansible_connection=local  ansible_python_interpreter="/usr/bin/env python"
+[zbx]
+crunchy ansible_host=137.74.85.248 ansible_user=centos ansible_password=tcwowa12  ansible_ssh_extra_args='-o StrictHostKeyChecking=no'

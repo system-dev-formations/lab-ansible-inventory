@@ -1,0 +1,25 @@
+---
+- hosts: crunchy
+  tasks:
+    - name: Create docker network
+      docker_network:
+        name: zabbix-net
+    - name: Create a postgresql-alpine container
+      docker_container:
+        name: db
+        image: systemdevformations/docker-postgres11.4
+        detach: yes
+        tty: yes
+        ports:
+          - "15432:5432"
+        networks:
+          - name: zabbix-net
+    - name: Create zabbix server container
+      docker_container:
+        name: zserver
+        image: systemdevformations/zabbix-server-pgsql
+        detach: yes
+        tty: yes
+        networks:
+          - name: zabbix-net
+

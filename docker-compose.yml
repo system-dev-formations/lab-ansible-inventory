@@ -1,0 +1,26 @@
+version: '3'
+networks:
+  zabbix_network:
+    driver: bridge
+
+services:
+  db:
+    hostname: postgres
+    image: systemdevformations/docker-postgres11.4
+    ports:
+    -  15432:5432
+    networks:
+      - zabbix_network
+  zabbix_server:
+    hostname: zserver
+    image: systemdevformations/zabbix-server-pgsql
+    environment:
+      DB_SERVER_HOST: zabbix-db
+      POSTGRES_USER: zabbix
+      POSTGRES_PASSWORD: password
+    links:
+      - db:postgres
+    depends_on:
+      - db
+    networks:
+      - zabbix_network
