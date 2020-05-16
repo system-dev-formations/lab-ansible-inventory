@@ -1,5 +1,6 @@
 ---
 - hosts: all
+  become: true
   tasks:
    - name: Delete container
      docker_container:
@@ -15,12 +16,13 @@
 
    - name: add container to inventory
      add_host:
-       name: web
+       name: container_web
        ansible_connection: docker
+       ansible_user: root
      changed_when: false
 
    - name: run command in container
-     delegate_to: web
+     delegate_to: container_web
      raw: yum -y update && yum install -y python && yum -y install git
 
    - name: run git command in container
